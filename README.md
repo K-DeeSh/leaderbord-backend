@@ -12,7 +12,7 @@ npm run dev   # режим разработки с авто-перезагруз
 npm start     # без watch
 ```
 
-Сервер запускается на `http://localhost:3001`.
+Сервер запускается на `http://localhost:4000`.
 
 ## API
 

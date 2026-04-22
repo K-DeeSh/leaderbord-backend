@@ -14,9 +14,9 @@ const GAME_LABELS: Record<string, string> = {
 
 // Anti-cheat config per game
 const MIN_PLAY_SECONDS: Record<string, number> = {
-  cto_simulator: 20,
-  last_mile_collapse: 20,
-  nu_pogodi: 5,
+  cto_simulator: 5,
+  last_mile_collapse: 5,
+  nu_pogodi: 3,
 };
 
 const MAX_SCORE: Record<string, number> = {
@@ -133,7 +133,11 @@ router.post('/scores', (req: Request, res: Response) => {
     reasons.length ? reasons.join(',') : null,
   );
 
-  return res.json({ id: result.lastInsertRowid, suspicious: isSuspicious === 1 });
+  return res.json({
+    id: result.lastInsertRowid,
+    suspicious: isSuspicious === 1,
+    reason: reasons.length ? reasons.join(',') : null,
+  });
 });
 
 // GET /api/leaderboard/:gameId — top scores for one game

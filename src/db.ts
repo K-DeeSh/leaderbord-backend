@@ -48,4 +48,14 @@ for (const sql of [
   try { db.exec(sql); } catch { /* column already exists */ }
 }
 
+// Retroactively mark implausibly-high scores as suspicious
+db.exec(`
+  UPDATE scores SET is_suspicious = 1, suspicious_reason = 'score_too_high_retroactive'
+  WHERE is_suspicious = 0
+    AND (
+      (game_id = 'cto_simulator'    AND score > 1000) OR
+      (game_id = 'last_mile_collapse' AND score > 250)
+    )
+`);
+
 export default db;

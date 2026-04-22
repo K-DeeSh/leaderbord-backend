@@ -136,7 +136,6 @@ router.post('/scores', (req: Request, res: Response) => {
   return res.json({
     id: result.lastInsertRowid,
     suspicious: isSuspicious === 1,
-    reason: reasons.length ? reasons.join(',') : null,
   });
 });
 
@@ -152,8 +151,12 @@ router.get('/leaderboard/:gameId', (req: Request, res: Response) => {
 
   const suspiciousFilter = showAll ? '' : 'AND (is_suspicious = 0 OR is_suspicious IS NULL)';
 
+  const fields = showAll
+    ? 'login, MAX(score) as score, archetype, difficulty, turns, duration_seconds, victory, is_suspicious, suspicious_reason, created_at'
+    : 'login, MAX(score) as score, archetype, difficulty, turns, duration_seconds, victory, created_at';
+
   const rows = db.prepare(`
-    SELECT login, MAX(score) as score, archetype, difficulty, turns, duration_seconds, victory, created_at
+    SELECT ${fields}
     FROM scores
     WHERE game_id = ? ${suspiciousFilter}
     GROUP BY login
